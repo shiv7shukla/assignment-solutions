@@ -57,3 +57,13 @@ function auth(req,res,next)
         res.json({msg:"invalid token"});
     }
 }
+
+app.get("/my-todos",auth,(req,res)=>{
+    const username=req.username;
+    const todo=todos.filter(u=>u.username===username);
+    res.json({todo});
+})
+
+
+
+app.listen(3000);
