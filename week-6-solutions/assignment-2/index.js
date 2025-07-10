@@ -17,7 +17,7 @@ app.post("/signup",(req,res)=>{
         username:z.string().min(3).max(100)
     })
     if(!((required.safeParse(req.body)).success))
-        res.json({msg:"incorrect credentials"});
+        return res.json({msg:"incorrect credentials"});
     else
     {
         const username=req.body.username;
@@ -29,15 +29,24 @@ app.post("/signup",(req,res)=>{
 })
 
 app.post("/signin",(req,res)=>{
-    const username=req.body.username;
-    const password=req.body.password;
-    if(users.find(u=>u.username===username&&u.password===password))
-    {
-        const token=jwt.sign({username},JWT_SECRET);
-        res.json({msg:"sign in successfully",token});
-    }
+    const required=z.object({
+        password:z.string().min(3).max(100),
+        username:z.string().min(3).max(100)
+    })
+    if(!((required.safeParse(req.body)).success))
+        return res.json({msg:"incorrect credentials"});
     else
-        res.json({msg:"invalid credentials"});
+    {
+        const username=req.body.username;
+        const password=req.body.password;
+        if(users.find(u=>u.username===username&&u.password===password))
+        {
+            const token=jwt.sign({username},JWT_SECRET);
+            return res.json({msg:"sign in successfully",token});
+        }
+        else
+            res.json({msg:"invalid credentials"});
+    }
 })
 
 function auth(req,res,next)
@@ -47,7 +56,7 @@ function auth(req,res,next)
     {
         const decode=jwt.verify(token,JWT_SECRET);
         if(!decode)
-            res.json({msg:"empty token"});
+            return res.json({msg:"empty token"});
         else
             req.username=decode.username;
         next();
@@ -83,7 +92,8 @@ app.post("/add-todo",auth,(req,res)=>{
 
 app.put("/done/:id",auth,(req,res)=>{
     const {id}=req.params;
-    const {title,username}=req.body;
+    const {title}=req.body;
+    const username=req.username;
     if(!id||!title||!username)
         res.json({msg:"something is missing"});
     else
@@ -101,14 +111,15 @@ app.put("/done/:id",auth,(req,res)=>{
 
 app.delete("/delete/:id",auth,(req,res)=>{
     const {id}=req.params;
-    const {title,username}=req.body;
+    const {title}=req.body;
+    const username=req.username;
     if(!id||!title||!username)
         res.json({msg:"something is missing"});
     else
     {
         const index=todos.findIndex(t=>t.username===username&&t.id===parseInt(id)&&t.title===title);
-        if(!index)
-            res.json({msg:"todo not found"});
+        if(index==-1)
+            return res.json({msg:"todo not found"});
         else
             todos.splice(index,1);
         res.json({msg:"todo deleted successfully"});
