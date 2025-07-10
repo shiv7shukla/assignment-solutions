@@ -40,3 +40,20 @@ app.post("/signin",(req,res)=>{
         res.json({msg:"invalid credentials"});
 })
 
+function auth(req,res,next)
+{
+    const token=req.headers.token;
+    try
+    {
+        const decode=jwt.verify(token,JWT_SECRET);
+        if(!decode)
+            res.json({msg:"empty token"});
+        else
+            req.username=decode.username;
+        next();
+    }
+    catch(e)
+    {
+        res.json({msg:"invalid token"});
+    }
+}
