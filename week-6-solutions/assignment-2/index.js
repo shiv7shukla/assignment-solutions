@@ -8,13 +8,13 @@ const{z}=require("zod");
 
 const users=[],todos=[];
 
-app.use(express());
+app.use(express.json());
 
 app.post("/signup",(req,res)=>{
     const required=z.object({
-        email:z.email().string().min(3).max(100),
+        name:z.string().min(3).max(100),
         password:z.string().min(3).max(100),
-        name:z.string().min(3).max(100)
+        username:z.string().min(3).max(100)
     })
     if(!((required.safeParse(req.body)).success))
         res.json({msg:"incorrect credentials"});
@@ -64,6 +64,55 @@ app.get("/my-todos",auth,(req,res)=>{
     res.json({todo});
 })
 
+app.post("/add-todo",auth,(req,res)=>{
+    const title=req.body.title;
+    const username=req.username;
+    if(!title)
+        res.json({msg:"todo title is empty"});
+    else
+    {
+        todos.push({
+            id:todos.length+1,
+            username,
+            title,
+            done:false
+        });
+        res.json({msg:"todo added"});
+    }
+})
 
+app.put("/done/:id",auth,(req,res)=>{
+    const {id}=req.params;
+    const {title,username}=req.body;
+    if(!id||!title||!username)
+        res.json({msg:"something is missing"});
+    else
+    {
+        const found=todos.find(t=>t.username===username&&t.id===parseInt(id)&&t.title===title);
+        if(!found)
+            res.json({msg:"todo not found"});
+        else
+        {
+            found.done=!found.done;
+            res.json({msg:`todo marked as ${found.done?"done":"not done"}`});
+        }
+    }
+})
+
+app.delete("/delete/:id",auth,(req,res)=>{
+    const {id}=req.params;
+    const {title,username}=req.body;
+    if(!id||!title||!username)
+        res.json({msg:"something is missing"});
+    else
+    {
+        const index=todos.findIndex(t=>t.username===username&&t.id===parseInt(id)&&t.title===title);
+        if(!index)
+            res.json({msg:"todo not found"});
+        else
+            todos.splice(index,1);
+        res.json({msg:"todo deleted successfully"});
+    } 
+})
 
 app.listen(3000);
