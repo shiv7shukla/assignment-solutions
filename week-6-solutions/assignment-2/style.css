@@ -10,6 +10,10 @@ html,body{
     font-family: Arial, sans-serif;
     background-color: rgb(25,27,50);
 }
+.card-title
+{
+    font-size: xxx-large;
+}
 .container{
     display: flex;
     justify-content: center;
@@ -17,7 +21,7 @@ html,body{
     height: 100%;
 }
 .card-body{
-    padding: 35px 0px 35px 0px;
+    padding: 0px 0px 0px 0px;
     border-radius: 10%;
     background-color: rgb(36,40,62);
     display: flex;
@@ -25,6 +29,7 @@ html,body{
     justify-content: center;
     flex-direction: column;
     height: 45vh;
+    width: 35vw;
 }
 .card-title{
     color: rgb(157,78,221);
@@ -36,21 +41,28 @@ html,body{
     margin-bottom: 30px;
     width: 90%;
     border: none;
-    height: 30px;
-    padding: 5%
+    height: 40px;
+    padding: 5%;
+    font-size: larger;
 }
 .input-todo::placeholder{
-    color: rgba(154,154,155);
+    color: rgba(255,255,255,0.7);
+}
+.input-todo:focus{
+    outline: none;
+    color: white;
 }
 .btn{
     background-color: rgba(90,24,154,0.7);
     border: none;
-    border-radius: 10%;
     width:90%;
-    height:30px;
+    height:47px;
     border-radius: 10px;
+    color:rgba(255,255,255,0.7);
+    font-size: larger;
 }
 .btn:hover{
     cursor: pointer;
     background-color: rgba(90,24,154,1.0);
+    color:rgba(255,255,255,1);
 }
