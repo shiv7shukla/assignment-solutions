@@ -113,3 +113,52 @@ html,body{
 .btn-submit:hover{
     cursor: pointer;
     background-color: rgba(13,110,253,1.0);
+}
+.container-3{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+display: none;
+}
+.signin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 5%;
+    width: 25vw;
+    height: 45vh;
+    font-size: x-large;
+}
+.signin input {
+    height: 37px;
+    width: 80%; /* Make them full-width inside the form */
+    font-size: 1.2rem;
+}
+
+.signin label {
+    margin-bottom: 20px; /* Reduce space between label and input */
+}
+
+.signin div{
+    margin-bottom: 20px;/* Space between email and password block*/
+}
+#inputPassword5{
+    margin-bottom: 20px;
+}
+.btn-submit{
+    background-color: rgba(13,110,253,0.7);
+    color: white;
+    border: none;
+    width:90%;
+    height:47px;
+    border-radius: 10px;
+    font-size: larger;
+}
+.btn-submit:hover{
+    cursor: pointer;
+    background-color: rgba(13,110,253,1.0);
+}
