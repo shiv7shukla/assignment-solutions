@@ -8,7 +8,7 @@ html,body{
     height: 100%;
     text-align: center;
     font-family: Arial, sans-serif;
-    background-color: rgb(25,27,50);
+    /* background-color: rgb(25,27,50); */
 }
 .card-title
 {
@@ -19,6 +19,7 @@ html,body{
     justify-content: center;
     align-items: center;
     height: 100%;
+    display: none;
 }
 .card-body{
     padding: 0px 0px 0px 0px;
@@ -66,3 +67,49 @@ html,body{
     background-color: rgba(90,24,154,1.0);
     color:rgba(255,255,255,1);
 }
+.container-2{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.signup{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid black;
+    border-radius: 5%;
+    width: 25vw;
+    height: 45vh;
+    font-size: x-large;
+}
+.signup input {
+    height: 37px;
+    width: 80%; /* Make them full-width inside the form */
+    font-size: 1.2rem;
+}
+
+.signup label {
+    margin-bottom: 20px; /* Reduce space between label and input */
+}
+
+.signup div {
+    margin-bottom: 20px;/* Space between email and password block*/
+}
+#inputPassword5{
+    margin-bottom: 20px;
+}
+.btn-submit{
+    background-color: rgba(13,110,253,0.7);
+    color: white;
+    border: none;
+    width:90%;
+    height:47px;
+    border-radius: 10px;
+    font-size: larger;
+}
+.btn-submit:hover{
+    cursor: pointer;
+    background-color: rgba(13,110,253,1.0);

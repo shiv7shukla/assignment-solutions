@@ -6,9 +6,16 @@ const JWT_SECRET="anything";
 
 const{z}=require("zod");
 
+const path = require('path');
+app.use(express.static(__dirname));
+
 const users=[],todos=[];
 
 app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.post("/signup",(req,res)=>{
     const required=z.object({
