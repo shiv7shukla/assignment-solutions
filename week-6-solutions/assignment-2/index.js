@@ -19,18 +19,16 @@ app.get('/', (req, res) => {
 
 app.post("/signup",(req,res)=>{
     const required=z.object({
-        name:z.string().min(3).max(100),
         password:z.string().min(3).max(100),
-        username:z.string().min(3).max(100)
+        email:z.string().min(3).max(100)
     })
     if(!((required.safeParse(req.body)).success))
         return res.json({msg:"incorrect credentials"});
     else
     {
-        const username=req.body.username;
+        const email=req.body.email;
         const password=req.body.password;
-        const name=req.body.name;
-        users.push({name,username,password});
+        users.push({email,password});
         res.json({msg:"you are signed up"});
     }
 })
@@ -38,17 +36,17 @@ app.post("/signup",(req,res)=>{
 app.post("/signin",(req,res)=>{
     const required=z.object({
         password:z.string().min(3).max(100),
-        username:z.string().min(3).max(100)
+        email:z.string().min(3).max(100)
     })
     if(!((required.safeParse(req.body)).success))
         return res.json({msg:"incorrect credentials"});
     else
     {
-        const username=req.body.username;
+        const email=req.body.email;
         const password=req.body.password;
-        if(users.find(u=>u.username===username&&u.password===password))
+        if(users.find(u=>u.email===email&&u.password===password))
         {
-            const token=jwt.sign({username},JWT_SECRET);
+            const token=jwt.sign({email},JWT_SECRET);
             return res.json({msg:"sign in successfully",token});
         }
         else
@@ -65,7 +63,7 @@ function auth(req,res,next)
         if(!decode)
             return res.json({msg:"empty token"});
         else
-            req.username=decode.username;
+            req.email=decode.email;
         next();
     }
     catch(e)
@@ -75,21 +73,21 @@ function auth(req,res,next)
 }
 
 app.get("/my-todos",auth,(req,res)=>{
-    const username=req.username;
-    const todo=todos.filter(u=>u.username===username);
+    const email=req.email;
+    const todo=todos.filter(u=>u.email===email);
     res.json({todo});
 })
 
 app.post("/add-todo",auth,(req,res)=>{
     const title=req.body.title;
-    const username=req.username;
+    const email=req.email;
     if(!title)
         res.json({msg:"todo title is empty"});
     else
     {
         todos.push({
             id:todos.length+1,
-            username,
+            email,
             title,
             done:false
         });
@@ -100,12 +98,12 @@ app.post("/add-todo",auth,(req,res)=>{
 app.put("/done/:id",auth,(req,res)=>{
     const {id}=req.params;
     const {title}=req.body;
-    const username=req.username;
-    if(!id||!title||!username)
+    const email=req.email;
+    if(!id||!title||!email)
         res.json({msg:"something is missing"});
     else
     {
-        const found=todos.find(t=>t.username===username&&t.id===parseInt(id)&&t.title===title);
+        const found=todos.find(t=>t.email===email&&t.id===parseInt(id)&&t.title===title);
         if(!found)
             res.json({msg:"todo not found"});
         else
@@ -119,12 +117,12 @@ app.put("/done/:id",auth,(req,res)=>{
 app.delete("/delete/:id",auth,(req,res)=>{
     const {id}=req.params;
     const {title}=req.body;
-    const username=req.username;
-    if(!id||!title||!username)
+    const email=req.email;
+    if(!id||!title||!email)
         res.json({msg:"something is missing"});
     else
     {
-        const index=todos.findIndex(t=>t.username===username&&t.id===parseInt(id)&&t.title===title);
+        const index=todos.findIndex(t=>t.email===email&&t.id===parseInt(id)&&t.title===title);
         if(index==-1)
             return res.json({msg:"todo not found"});
         else
