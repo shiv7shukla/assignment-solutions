@@ -8,7 +8,6 @@ html,body{
     height: 100%;
     text-align: center;
     font-family: Arial, sans-serif;
-    background-color: rgb(25,27,50);
 }
 .card-title
 {
@@ -19,7 +18,7 @@ html,body{
     justify-content: center;
     align-items: center;
     height: 100%;
-    /* display: none; */
+    display: none;
 }
 .card-body{
     padding: 0px 0px 0px 0px;
@@ -73,7 +72,7 @@ html,body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    display: none;
+    /* display: none; */
 }
 .signup{
     display: flex;
@@ -121,7 +120,7 @@ html,body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    /* display: none; */
+    display: none;
 }
 .signin{
     display: flex;
@@ -178,6 +177,6 @@ html,body{
     background-color: #ce770e;
     outline: none;
 }
-.todo-list > input,label:hover {
+/* .todo-list > input,label:hover {
     color:rgba(255,255,255,1)
-}
+} */

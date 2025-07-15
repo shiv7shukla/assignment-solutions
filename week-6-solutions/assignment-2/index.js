@@ -6,21 +6,24 @@ const JWT_SECRET="anything";
 
 const{z}=require("zod");
 
+const cors=require("cors");
+
 const path = require('path');
 app.use(express.static(__dirname));
 
 const users=[],todos=[];
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.post("/signup",(req,res)=>{
     const required=z.object({
         password:z.string().min(3).max(100),
-        email:z.string().min(3).max(100)
+        email:z.email().min(3).max(100)
     })
     if(!((required.safeParse(req.body)).success))
         return res.json({msg:"incorrect credentials"});
@@ -112,23 +115,6 @@ app.put("/done/:id",auth,(req,res)=>{
             res.json({msg:`todo marked as ${found.done?"done":"not done"}`});
         }
     }
-})
-
-app.delete("/delete/:id",auth,(req,res)=>{
-    const {id}=req.params;
-    const {title}=req.body;
-    const email=req.email;
-    if(!id||!title||!email)
-        res.json({msg:"something is missing"});
-    else
-    {
-        const index=todos.findIndex(t=>t.email===email&&t.id===parseInt(id)&&t.title===title);
-        if(index==-1)
-            return res.json({msg:"todo not found"});
-        else
-            todos.splice(index,1);
-        res.json({msg:"todo deleted successfully"});
-    } 
 })
 
 app.listen(3000);

@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="data:,"/>
-    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <!-- todo functionality -->
@@ -15,23 +15,23 @@
             <div class="card-body">
                 <h1 class="card-title">100xTODO</h1>
                 <input class="input-todo" type="text" placeholder="Enter a todo...">
-                <button class="btn btn-primary">Add Todo</button>
-                <div class="todo-list">
+                <button class="btn btn-primary input-btn" onclick="addtodo()">Add Todo</button>
+                <!-- <div class="todo-list">
                     <ul class="list-group">
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
-                        <label class="form-check-label" for="firstCheckbox">First checkbox</label>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox">
-                        <label class="form-check-label" for="secondCheckbox">Second checkbox</label>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
-                        <label class="form-check-label" for="thirdCheckbox">Third checkbox</label>
-                    </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1 " type="checkbox" value="" id="firstCheckbox" onclick="tododone()">
+                            <label class="form-check-label" for="firstCheckbox">First checkbox</label>
+                        </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1 2" type="checkbox" value="" id="secondCheckbox">
+                            <label class="form-check-label" for="secondCheckbox">Second checkbox</label>
+                        </li>
+                        <li class="list-group-item">
+                            <input class="form-check-input me-1 3" type="checkbox" value="" id="thirdCheckbox">
+                            <label class="form-check-label" for="thirdCheckbox">Third checkbox</label>
+                        </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -41,13 +41,13 @@
             <div>
                 <div>
                     <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                    <input type="email" class="form-control signup-email" id="exampleFormControlInput1" placeholder="name@example.com">
                 </div>
                 <div>
-                    <label for="inputPassword5" class="form-label">Password</label>
+                    <label for="inputPassword5" class="form-label signup-pwd">Password</label>
                     <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
                 </div>
-                <button type="button" class="btn-submit">Sign Up</button>
+                <button type="button" class="btn-submit" onclick="signup()">Sign Up</button>
             </div>
         </div>
     </div>
@@ -57,13 +57,13 @@
             <div>
                 <div>
                     <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                    <input type="email" class="form-control signin-email" id="exampleFormControlInput1" placeholder="name@example.com">
                 </div>
                 <div>
                     <label for="inputPassword5" class="form-label email">Password</label>
-                    <input type="password" id="inputPassword5" class="form-control password" aria-describedby="passwordHelpBlock">
+                    <input type="password" id="inputPassword5" class="form-control signin-pwd" aria-describedby="passwordHelpBlock">
                 </div>
-                <button type="button" class="btn-submit">Sign In</button>
+                <button type="button" class="btn-submit" onclick="signin()">Sign In</button>
             </div>
         </div>
     </div>
