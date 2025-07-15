@@ -23,10 +23,14 @@ app.get('/', (req, res) => {
 app.post("/signup",(req,res)=>{
     const required=z.object({
         password:z.string().min(3).max(100),
-        email:z.email().min(3).max(100)
+        email:z.email()
     })
-    if(!((required.safeParse(req.body)).success))
+    const result=required.safeParse(req.body);
+    if(!result.success)
+    {
+        console.log(result.error);
         return res.json({msg:"incorrect credentials"});
+    }
     else
     {
         const email=req.body.email;

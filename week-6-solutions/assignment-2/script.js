@@ -3,10 +3,10 @@ async function signup() {
     try {
         const email = document.querySelector(".signup-email").value;
         const password = document.querySelector(".signup-pwd").value;
-
+        console.log(email);
         const res = await axios.post("http://localhost:3000/signup", {
-            email,
-            password
+            password,
+            email
         });
 
         if (res.data.msg === "you are signed up") {
@@ -36,7 +36,7 @@ async function signin() {
             localStorage.setItem("token", res.data.token);
             document.querySelector(".container-3").style.display = "none";
             document.querySelector(".container").style.display = "flex";
-            document.body.style.backgroundcolor=" rgb(25,27,50)";
+            document.body.style.backgroundColor=" rgb(25,27,50)";
             gettodos();
         } else {
             alert(res.data.msg);
@@ -62,6 +62,10 @@ async function gettodos() {
                 const todoElement = createTodoElement(todo);
                 todosList.appendChild(todoElement);
             });
+            input.addEventListener("change", () => {
+        tododone(todo.id);
+        li.remove();
+    });
         }
     } catch (e) {
         alert("Failed to load todos");
@@ -118,10 +122,6 @@ function createTodoElement(todo) {
     input.className = "form-check-input me-1";
     input.type = "checkbox";
     input.checked = todo.done;
-    input.addEventListener("change", () => {
-        tododone(todo.id);
-        li.remove();
-    });
 
     const label = document.createElement("label");
     label.className = "form-check-label";
