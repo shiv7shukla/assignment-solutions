@@ -27,10 +27,7 @@ app.post("/signup",(req,res)=>{
     })
     const result=required.safeParse(req.body);
     if(!result.success)
-    {
-        console.log(result.error);
         return res.json({msg:"incorrect credentials"});
-    }
     else
     {
         const email=req.body.email;
@@ -81,7 +78,7 @@ function auth(req,res,next)
 
 app.get("/my-todos",auth,(req,res)=>{
     const email=req.email;
-    const todo=todos.filter(u=>u.email===email);
+    const todo=todos.filter(u=>u.email==email);
     res.json({todo});
 })
 

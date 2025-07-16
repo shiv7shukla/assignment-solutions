@@ -3,7 +3,6 @@ async function signup() {
     try {
         const email = document.querySelector(".signup-email").value;
         const password = document.querySelector(".signup-pwd").value;
-        console.log(email);
         const res = await axios.post("http://localhost:3000/signup", {
             password,
             email
@@ -53,19 +52,14 @@ async function gettodos() {
         const res = await axios.get("http://localhost:3000/my-todos", {
             headers: { token: localStorage.getItem("token") }
         });
-
         const todosList = document.querySelector(".list-group");
         todosList.innerHTML = "";
-
-        if (res.data.todo && res.data.todo.length) {
+        if (res.data.todo && res.data.todo.length) 
+        {
             res.data.todo.forEach((todo) => {
                 const todoElement = createTodoElement(todo);
                 todosList.appendChild(todoElement);
             });
-            input.addEventListener("change", () => {
-        tododone(todo.id);
-        li.remove();
-    });
         }
     } catch (e) {
         alert("Failed to load todos");
@@ -122,6 +116,10 @@ function createTodoElement(todo) {
     input.className = "form-check-input me-1";
     input.type = "checkbox";
     input.checked = todo.done;
+    input.addEventListener("change", () => {
+        tododone(todo.id);
+        li.remove(); // remove when checked
+    });
 
     const label = document.createElement("label");
     label.className = "form-check-label";
@@ -129,17 +127,6 @@ function createTodoElement(todo) {
 
     li.appendChild(input);
     li.appendChild(label);
+
     return li;
 }
-
-// Optional: attach buttons if you didn’t use onclick in HTML
-// window.onload = function () {
-//     const signupBtn = document.querySelector(".signup-btn");
-//     if (signupBtn) signupBtn.addEventListener("click", signup);
-
-//     const signinBtn = document.querySelector(".signin-btn");
-//     if (signinBtn) signinBtn.addEventListener("click", signin);
-
-//     const addTodoBtn = document.querySelector(".input-btn");
-//     if (addTodoBtn) addTodoBtn.addEventListener("click", addtodo);
-// };
