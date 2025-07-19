@@ -1,4 +1,5 @@
 const {Router}=require("express");
+const {UserModel}=require("../db");
 
 const userRouter=Router();
 
