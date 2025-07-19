@@ -2,7 +2,7 @@ const {Router}=require("express");
 
 const userRouter=Router();
 
-//signin endpoint
+//signup endpoint
 userRouter.post("/signup",(req,res)=>{
 
 })
