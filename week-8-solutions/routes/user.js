@@ -25,11 +25,11 @@ userRouter.post("/signup",async (req,res)=>{
         const hashedPwd=await bcrypt.hash(password,5);
         try{
             await UserModel.create({email,password:hashedPwd,firstName,lastName});
-            return res.status(200).json({msg:"you are signed up"});
+            return res.json({msg:"you are signed up"});
         }
         catch(err)
         {
-            if (err.code === 11000)//duplicate error will be handles here
+            if (err.code === 11000)//duplication errors will be handles here
                 return res.status(409).json({ msg: "Email already in use" });
             console.error(err);//other errors in MongoDb will be handles here using generic case
             res.status(500).json({ msg: "Internal server error" });
@@ -44,7 +44,7 @@ userRouter.post("/signin",async (req,res)=>{
     });
     const {success}=requiredBody.safeParse(req.body);
     if(!success)
-        return res.json({msg:"invalid email"});
+        return res.status(401).json({msg:"invalid email"});
     else
     {
         let user;
@@ -55,7 +55,7 @@ userRouter.post("/signin",async (req,res)=>{
                 return res.status(404).json({msg:"user not found"});
             const match=await bcrypt.compare(password,user.password);
             if(!match)
-                return res.status(403).json({msg:"invalid password"});
+                return res.status(401).json({msg:"invalid password"});
             const token=jwt.sign({id:user._id.toString()},JWT_USER_PWD);
             return res.json({token,msg:"signed in"});
         }
