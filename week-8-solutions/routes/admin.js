@@ -1,10 +1,12 @@
+require("dotenv").config();
+
 const {Router}=require("express");
 const{AdminModel}=require("../db");
 const {z}=require("zod");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 
-const JWT_ADMIN_PWD="admin";
+const JWT_ADMIN_PWD=process.env.JWT_ADMIN_PWD;
 
 const adminRouter=Router();
 
@@ -24,7 +26,7 @@ adminRouter.post("/signup",async (req,res)=>{
         const {email,password,firstName,lastName}=req.body;
         const hashedPwd=await bcrypt.hash(password,5);
         try{
-            await UserModel.create({email,password:hashedPwd,firstName,lastName});
+            await AdminModel.create({email,password:hashedPwd,firstName,lastName});
             return res.json({msg:"you are signed up"});
         }
         catch(err)
@@ -50,7 +52,7 @@ adminRouter.post("/signin",async (req,res)=>{
         let admin;
         const {email,password}=req.body;
         try{
-            admin=await UserModel.findOne({email});
+            admin=await AdminModel.findOne({email});
             if(!admin)
                 return res.status(404).json({msg:"admin not found"});
             const match=await bcrypt.compare(password,admin.password);

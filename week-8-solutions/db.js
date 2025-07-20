@@ -1,7 +1,10 @@
+require("dotenv").config();
+
+const MONGO_URL=process.env.MONGO_URL;
 const mongoose=require("mongoose");
 (async ()=>{
     try{
-        await mongoose.connect("mongodb+srv://shivs_admin:142005@cluster0.iwlb894.mongodb.net/course-app");}
+        await mongoose.connect(MONGO_URL);}
     catch{
         console.log("error in connecting to database");}
 })();

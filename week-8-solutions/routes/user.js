@@ -1,10 +1,11 @@
+require("dotenv").config();
+
 const {Router}=require("express");
 const {UserModel}=require("../db");
 const {z}=require("zod");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
-
-const JWT_USER_PWD="user";
+const JWT_USER_PWD=process.env.JWT_USER_PWD;
 
 const userRouter=Router();
 
