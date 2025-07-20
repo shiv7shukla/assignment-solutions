@@ -2,6 +2,9 @@ const {Router}=require("express");
 const {UserModel}=require("../db");
 const {z}=require("zod");
 const bcrypt=require("bcrypt");
+const jwt=require("jsonwebtoken");
+
+const JWT_USER_PWD="user";
 
 const userRouter=Router();
 
@@ -15,16 +18,13 @@ userRouter.post("/signup",async (req,res)=>{
     });
     const {success}=requiredBody.safeParse(req.body);
     if(!success)
-    {
-        const {error}=requiredBody.safeParse(req.body);
         return res.json({msg:"incorrect data entry"});
-    }
     else
     {
         const {email,password,firstName,lastName}=req.body;
         const hashedPwd=await bcrypt.hash(password,5);
         try{
-            await UserModel.create({email,hashedPwd,firstName,lastName});
+            await UserModel.create({email,password:hashedPwd,firstName,lastName});
             return res.status(200).json({msg:"you are signed up"});
         }
         catch(err)
@@ -38,8 +38,34 @@ userRouter.post("/signup",async (req,res)=>{
 })
 
 //signin endpoint
-userRouter.post("/signin",(req,res)=>{
-
+userRouter.post("/signin",async (req,res)=>{
+    const requiredBody=z.object({
+        email:z.email()
+    });
+    const {success}=requiredBody.safeParse(req.body);
+    if(!success)
+        return res.json({msg:"invalid email"});
+    else
+    {
+        let user;
+        const {email,password}=req.body;
+        try{
+            user=await UserModel.findOne({email});
+            if(!user)
+                return res.status(404).json({msg:"user not found"});
+            const match=await bcrypt.compare(password,user.password);
+            if(!match)
+                return res.status(403).json({msg:"invalid password"});
+            const token=jwt.sign({id:user._id.toString()},JWT_USER_PWD);
+            return res.json({token,msg:"signed in"});
+        }
+        catch(err)
+        {
+            if (err.name === "CastError")
+                return res.status(400).json({ msg: "Invalid ID format" });
+            res.status(500).json({ msg: "Internal server error" });
+        }
+    }
 })
 
 //purchases made by user
