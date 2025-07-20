@@ -1,13 +1,13 @@
-require("dotenv").config();
-
 const {Router}=require("express");
 const {UserModel}=require("../db");
 const {z}=require("zod");
+const {UserMiddleware}=require("../middlewares/user")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 const JWT_USER_PWD=process.env.JWT_USER_PWD;
 
 const userRouter=Router();
+
 
 //signup endpoint
 userRouter.post("/signup",async (req,res)=>{
@@ -70,8 +70,7 @@ userRouter.post("/signin",async (req,res)=>{
 })
 
 //purchases made by user
-userRouter.get("/purchases",(req,res)=>{
-
+userRouter.get("/purchases",UserMiddleware,(req,res)=>{
 })
 
 module.exports={userRouter};

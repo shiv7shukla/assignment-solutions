@@ -1,11 +1,9 @@
-require("dotenv").config();
-
 const {Router}=require("express");
-const{AdminModel}=require("../db");
+const {AdminModel}=require("../db");
 const {z}=require("zod");
+const {AdminMiddleware}=require("../middlewares/admin")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
-
 const JWT_ADMIN_PWD=process.env.JWT_ADMIN_PWD;
 
 const adminRouter=Router();
@@ -71,17 +69,17 @@ adminRouter.post("/signin",async (req,res)=>{
 })
 
 //course creation endpoint
-adminRouter.post("/",(req,res)=>{
+adminRouter.post("/",AdminMiddleware,(req,res)=>{
 
 })
 
 //change the course endpoint
-adminRouter.put("/",(req,res)=>{
+adminRouter.put("/",AdminMiddleware,(req,res)=>{
 
 })
 
 //all the courses created endpoint
-adminRouter.get("/bulk",(req,res)=>{
+adminRouter.get("/bulk",AdminMiddleware,(req,res)=>{
 
 })
 

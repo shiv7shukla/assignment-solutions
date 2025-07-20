@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const MONGO_URL=process.env.MONGO_URL;
 const mongoose=require("mongoose");
 (async ()=>{
