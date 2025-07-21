@@ -108,6 +108,9 @@ adminRouter.put("/",AdminMiddleware,async(req,res)=>{
     {
         const {title,description,price,imageurl,courseId}=req.body;
         try{
+            const course=await CourseModel.findOne({_id:courseId,creatorId:req.id});
+            if(!course)
+                return res.status(401).json({msg:"unauthorized acess"});
             const update=await CourseModel.updateOne({_id:courseId},{title,description,price,imageurl});
             if(update.matchedCount===0)
                 return res.status(404).json({ msg: "Course not found" });
@@ -123,8 +126,17 @@ adminRouter.put("/",AdminMiddleware,async(req,res)=>{
 })
 
 //all the courses created endpoint
-adminRouter.get("/bulk",AdminMiddleware,(req,res)=>{
-
+adminRouter.get("/bulk",AdminMiddleware,async (req,res)=>{
+    try{
+        const course=await CourseModel.find({creatorId:req.id});
+        if(!course)
+            return res.status(404).json({msg:"no course found"});
+        return res.json({course});
+    }
+    catch(err)
+        {
+            return res.status(500).json({ msg: "Internal server error" });
+        }
 })
 
 module.exports={adminRouter};
