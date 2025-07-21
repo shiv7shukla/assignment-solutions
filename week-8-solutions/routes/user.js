@@ -47,10 +47,9 @@ userRouter.post("/signin",async (req,res)=>{
         return res.status(401).json({msg:"invalid email"});
     else
     {
-        let user;
         const {email,password}=req.body;
         try{
-            user=await UserModel.findOne({email});
+            const user=await UserModel.findOne({email});
             if(!user)
                 return res.status(404).json({msg:"user not found"});
             const match=bcrypt.compare(password,user.password);

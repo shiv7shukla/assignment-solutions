@@ -47,10 +47,9 @@ adminRouter.post("/signin",async (req,res)=>{
         return res.status(401).json({msg:"invalid email"});
     else
     {
-        let admin;
         const {email,password}=req.body;
         try{
-            admin=await AdminModel.findOne({email});
+            const admin=await AdminModel.findOne({email});
             if(!admin)
                 return res.status(404).json({msg:"admin not found"});
             const match=bcrypt.compare(password,admin.password);
@@ -70,21 +69,57 @@ adminRouter.post("/signin",async (req,res)=>{
 
 //course creation endpoint
 adminRouter.post("/",AdminMiddleware,async(req,res)=>{
-    const {titel,description,price,imageurl,creatorId}=req.body;
-    try{
-        const course=await CourseModel.create({titel,description,price,imageurl,creatorId});
-        return res.json({msg:"course created",courseId:course._id});
-    }
-    catch(err)
+    const requiredBody=z.object({
+        title:z.string(),
+        description:z.string(),
+        price:z.number().nonnegative(),
+        imageurl:z.url()
+    });
+    const {success}=requiredBody.safeParse(req.body);
+    if(!success)
+        return res.status(400).json({msg:"invalid data"});
+    else
     {
-        console.error(err);//other errors in MongoDb will be handles here using generic case
-        res.status(500).json({ msg: "Internal server error" });
+        const {title,description,price,imageurl}=req.body;
+        try{
+            const course=await CourseModel.create({title,description,price,imageurl,creatorId:req.id});
+            return res.status(201).json({msg:"course created",courseId:course._id});
+        }
+        catch(err)
+        {
+            console.error(err);//other errors in MongoDb will be handles here using generic case
+            res.status(500).json({ msg: "Internal server error" });
+        }
     }
 })
 
 //change the course endpoint
-adminRouter.put("/",AdminMiddleware,(req,res)=>{
-
+adminRouter.put("/",AdminMiddleware,async(req,res)=>{
+    const requiredBody=z.object({
+        title:z.string(),
+        description:z.string(),
+        price:z.number().nonnegative(),
+        imageurl:z.url()
+    });
+    const {success}=requiredBody.safeParse(req.body);
+    if(!success)
+        return res.status(401).json({msg:"invalid data"});
+    else
+    {
+        const {title,description,price,imageurl,courseId}=req.body;
+        try{
+            const update=await CourseModel.updateOne({_id:courseId},{title,description,price,imageurl});
+            if(update.matchedCount===0)
+                return res.status(404).json({ msg: "Course not found" });
+            if(update.modifiedCount===0)
+                return res.json({ msg: "No changes made, course already up-to-date" });
+            return res.json({msg:"course updated"});
+        }
+        catch(err)
+        {
+            return res.status(500).json({ msg: "Internal server error" });
+        }
+    }
 })
 
 //all the courses created endpoint
