@@ -7,7 +7,6 @@ const mongoose=require("mongoose");
         console.log("error in connecting to database");}
 })();
 
-
 const Schema=mongoose.Schema;
 const ObjectId=Schema.Types.ObjectId;
 

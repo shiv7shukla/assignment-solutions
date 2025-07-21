@@ -1,5 +1,5 @@
 const {Router}=require("express");
-const {AdminModel}=require("../db");
+const {AdminModel,CourseModel}=require("../db");
 const {z}=require("zod");
 const {AdminMiddleware}=require("../middlewares/admin")
 const bcrypt=require("bcrypt");
@@ -53,7 +53,7 @@ adminRouter.post("/signin",async (req,res)=>{
             admin=await AdminModel.findOne({email});
             if(!admin)
                 return res.status(404).json({msg:"admin not found"});
-            const match=await bcrypt.compare(password,admin.password);
+            const match=bcrypt.compare(password,admin.password);
             if(!match)
                 return res.status(401).json({msg:"invalid password"});
             const token=jwt.sign({id:admin._id.toString()},JWT_ADMIN_PWD);
@@ -69,8 +69,17 @@ adminRouter.post("/signin",async (req,res)=>{
 })
 
 //course creation endpoint
-adminRouter.post("/",AdminMiddleware,(req,res)=>{
-
+adminRouter.post("/",AdminMiddleware,async(req,res)=>{
+    const {titel,description,price,imageurl,creatorId}=req.body;
+    try{
+        const course=await CourseModel.create({titel,description,price,imageurl,creatorId});
+        return res.json({msg:"course created",courseId:course._id});
+    }
+    catch(err)
+    {
+        console.error(err);//other errors in MongoDb will be handles here using generic case
+        res.status(500).json({ msg: "Internal server error" });
+    }
 })
 
 //change the course endpoint

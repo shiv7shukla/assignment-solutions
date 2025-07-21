@@ -8,7 +8,6 @@ const JWT_USER_PWD=process.env.JWT_USER_PWD;
 
 const userRouter=Router();
 
-
 //signup endpoint
 userRouter.post("/signup",async (req,res)=>{
     const requiredBody=z.object({
@@ -30,7 +29,7 @@ userRouter.post("/signup",async (req,res)=>{
         }
         catch(err)
         {
-            if (err.code === 11000)//duplication errors will be handles here
+            if (err.code === 11000)//errors due to duplicate data will be handled here
                 return res.status(409).json({ msg: "Email already in use" });
             console.error(err);//other errors in MongoDb will be handles here using generic case
             res.status(500).json({ msg: "Internal server error" });
@@ -54,7 +53,7 @@ userRouter.post("/signin",async (req,res)=>{
             user=await UserModel.findOne({email});
             if(!user)
                 return res.status(404).json({msg:"user not found"});
-            const match=await bcrypt.compare(password,user.password);
+            const match=bcrypt.compare(password,user.password);
             if(!match)
                 return res.status(401).json({msg:"invalid password"});
             const token=jwt.sign({id:user._id.toString()},JWT_USER_PWD);
